@@ -1,5 +1,6 @@
 import sys
 import file
+import re
 
 def loadOpCode(filename):
 
