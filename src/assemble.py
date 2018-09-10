@@ -2,6 +2,9 @@ import sys
 import file
 import re
 
+opcodes = {}
+regcodes = {}
+
 def loadOpCode(filename):
 
     opCodeDict = {}
