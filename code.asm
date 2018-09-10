@@ -1,0 +1,1 @@
+MOV AX,BX ; Teste
