@@ -81,6 +81,34 @@ def decode(line):
         line = line.strip()
         args = line[3:].split(",")
         return opcodes['MOV_MI'] + " " + (args[0])[2:len(args[0]) - 1] + " " + args[1]
+
+    elif re.search('ADD(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
+        line = line.strip()
+        args = line[4:].split(",")
+        return opcodes['ADD'] + " " + (getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
+
+    elif re.search('SUB(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
+        line = line.strip()
+        args = line[4:].split(",")
+        return opcodes['SUB'] + " " + (getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
+
+    elif re.search('CMP(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
+        line = line.strip()
+        args = line[4:].split(",")
+        return opcodes['CMP'] + " " + (getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
+
+    elif re.search('JMP(\s)*([0-9]+)', line):
+        line = line.strip()
+        return opcodes['JMP'] + " " + line[4:len(line) - 1]
+
+    elif re.search('JZ(\s)*([-])?(\s)*([0-9]+)', line):
+        line = line.strip()
+        return opcodes['JZ'] + " " + line[4:len(line) - 1]
+
+    elif re.search('JG(\s)*([0-9]+)', line):
+        line = line.strip()
+        return opcodes['JG'] + " " + line[4:len(line) - 1]
+
     else:
         print("Command " + line.strip() + " not found")
         sys.exit(0)
