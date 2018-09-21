@@ -109,9 +109,45 @@ def decode(line):
         line = line.strip()
         return opcodes['JG'] + " " + line[4:len(line) - 1]
 
+    elif re.search('JL(\s)*([0-9]+)(\s)*', line):
+        line = line.strip()
+        args = re.sub(r"JL(\s)*","",line)
+        return opcodes['JL'] + " " + args
+
+    elif re.search('OUT(\s)*([a-zA-Z]+)(\s)*', line):
+        line = line.strip()
+        args = re.sub(r"OUT(\s)*","",line)
+
+        return opcodes['OUT'] + " " + getRegister(args)
+
+    elif re.search('INC(\s)*([a-zA-Z]+)(\s)*', line):
+        line = line.strip()
+        args = re.sub(r"INC(\s)*","",line)
+
+        return opcodes['INC'] + " " + getRegister(args)    
+
+    elif re.search('DEC(\s)*([a-zA-Z]+)(\s)*', line):
+        line = line.strip()
+        args = re.sub(r"DEC(\s)*","",line)
+
+        return opcodes['DEC'] + " " + getRegister(args)   
+
+    elif re.search('MUL(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
+        line = line.strip()
+        line = re.sub(r"MUL(\s)*","",line)
+        regs = line.split(",")
+        return opcodes['MUL'] + " " + getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())     
+
+    elif re.search('DIV(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
+        line = line.strip()
+        line = re.sub(r"DIV(\s)*","",line)
+        regs = line.split(",")
+        return opcodes['DIV'] + " " + getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
+    
     else:
         print("Command " + line.strip() + " not found")
         sys.exit(0)
+        
     return
 
 def main():
@@ -130,6 +166,8 @@ def main():
         for line in inputFile:
             opcode = decode(line)
             output += opcode + " "
+
+    print output
 
     outputfile = open("bin/" + sys.argv[4], "a") if re.search('([a-zA-Z]+).run', sys.argv[4]) else open("bin/" + sys.argv[4] + ".run", "a")
 
