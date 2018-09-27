@@ -48,7 +48,7 @@ def decode(line):
 
     try:
         commentPosition = line.index(";")
-        line = line[:commentPosition-1]
+        line = line[:commentPosition]
     except ValueError:
         pass
 
