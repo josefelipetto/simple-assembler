@@ -95,7 +95,7 @@ def decode(line):
     elif re.search('CMP(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
         regs = line[3:].split(",")
-        return opcodes['CMP'] + " " + (getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
+        return opcodes['CMP'] + " " + getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
 
     elif re.search('JMP(\s)*([0-9]+)', line):
         line = line.strip()
