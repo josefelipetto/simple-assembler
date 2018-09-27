@@ -48,7 +48,7 @@ def decode(line):
 
     try:
         commentPosition = line.index(";")
-        line = line[:commentPosition-1]
+        line = line[:commentPosition]
     except ValueError:
         pass
 
@@ -84,18 +84,18 @@ def decode(line):
 
     elif re.search('ADD(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
-        args = line[4:].split(",")
-        return opcodes['ADD'] + " " + (getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
+        regs = line[4:].split(",")
+        return opcodes['ADD'] + " " + getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
 
     elif re.search('SUB(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
-        args = line[4:].split(",")
-        return opcodes['SUB'] + " " + (getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
+        regs = line[4:].split(",")
+        return opcodes['SUB'] + " " + getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
 
     elif re.search('CMP(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
-        args = line[4:].split(",")
-        return opcodes['CMP'] + " " + (getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
+        regs = line[4:].split(",")
+        return opcodes['CMP'] + " " + getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
 
     elif re.search('JMP(\s)*([0-9]+)', line):
         line = line.strip()
