@@ -11,3 +11,4 @@ CMP BX, CX;
 JMP 2;
 JZ -5;
 JG 10;
+JL 200

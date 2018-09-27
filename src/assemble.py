@@ -52,6 +52,9 @@ def decode(line):
     except ValueError:
         pass
 
+    if line == "":
+        return ""
+
     if re.search('NOP', line):
         return opcodes['NOP']
 
@@ -59,11 +62,11 @@ def decode(line):
         return opcodes['HALT']
 
     elif re.search('MOV(\s)*([a-zA-Z]+)(\s)*,(\s)*(\[[0-9]+\])(\s)*', line):
-        line = line.strip()
-        return opcodes["MOV_RM"] + " " + getRegister(line[4:6]) + " " + line[8:len(line) - 1]
+        line = re.sub("(\s)*", "", line)
+        return opcodes["MOV_RM"] + " " + getRegister(line[3:5]) + " " + line[7:len(line) - 1]
 
     elif re.search('MOV(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
-        line = line.strip()
+        line = re.sub("(\s)*", "", line)
         regs = line[3:].split(",")
         return opcodes['MOV_RR'] + " " + getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
 
@@ -99,20 +102,19 @@ def decode(line):
 
     elif re.search('JMP(\s)*([0-9]+)', line):
         line = line.strip()
-        return opcodes['JMP'] + " " + line[3:len(line) - 1]
+        return opcodes['JMP'] + " " + (line.split(" "))[1]
 
     elif re.search('JZ(\s)*([-])?(\s)*([0-9]+)', line):
         line = line.strip()
-        return opcodes['JZ'] + " " + line[3:len(line) - 1]
+        return opcodes['JZ'] + " " + (line.split(" "))[1]
 
     elif re.search('JG(\s)*([0-9]+)', line):
         line = line.strip()
-        return opcodes['JG'] + " " + line[3:len(line) - 1]
+        return opcodes['JG'] + " " + (line.split(" "))[1]
 
     elif re.search('JL(\s)*([0-9]+)(\s)*', line):
         line = line.strip()
-        args = re.sub(r"JL(\s)*","",line)
-        return opcodes['JL'] + " " + args
+        return opcodes['JL'] + " " + re.sub(r"JL(\s)*", "", line)
 
     elif re.search('OUT(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
@@ -165,7 +167,8 @@ def main():
     with open(sys.argv[1], "r") as inputFile:
         for line in inputFile:
             opcode = decode(line)
-            output += opcode + " "
+            if opcode != "":
+                output += opcode + " "
 
     print output
 
