@@ -52,8 +52,9 @@ def decode(line):
     except ValueError:
         pass
 
-    if line == "":
+    if line.strip() == "":
         return ""
+
 
     if re.search('NOP', line):
         return opcodes['NOP']
@@ -75,15 +76,15 @@ def decode(line):
         args = line[4:].split(",")
         return opcodes["MOV_MR"] + " " + (args[0])[1:len(args[0])-1] + " " + getRegister(args[1])
 
-    elif re.search('MOV(\s)*([a-zA-Z]+)(\s)*,(\s)*([0-9]+)(\s)*', line):
-        line = line.strip()
+    elif re.search('MOV(\s)*([a-zA-Z]+)(\s)*,(\s)*([-])?(\s)*([0-9]+)(\s)*', line):
+        line = re.sub(r"(\s)*", "", line)
         args = line[3:].split(",")
-        return opcodes['MOV_RI'] + " " + getRegister(args[0].strip()) + " " + args[1]
+        return opcodes['MOV_RI'] + " " + getRegister(args[0]) + " " + args[1]
 
-    elif re.search('MOV(\s)*(\[[0-9]+\])(\s)*,(\s)*([0-9]+)(\s)*', line):
-        line = line.strip()
+    elif re.search('MOV(\s)*(\[[0-9]+\])(\s)*,(\s)*([-])?(\s)*([0-9]+)(\s)*', line):
+        line = re.sub(r"(\s)*", "", line)
         args = line[3:].split(",")
-        return opcodes['MOV_MI'] + " " + (args[0])[2:len(args[0]) - 1] + " " + args[1]
+        return opcodes['MOV_MI'] + " " + (args[0])[1:len(args[0]) - 1] + " " + args[1]
 
     elif re.search('ADD(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
