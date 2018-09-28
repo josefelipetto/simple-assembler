@@ -55,93 +55,92 @@ def decode(line):
     if line.strip() == "":
         return ""
 
-
-    if re.search('NOP', line):
+    if re.search(r'NOP', line):
         return opcodes['NOP']
 
-    elif re.search('HALT', line):
+    elif re.search(r'HALT', line):
         return opcodes['HALT']
 
-    elif re.search('MOV(\s)*([a-zA-Z]+)(\s)*,(\s)*(\[[0-9]+\])(\s)*', line):
+    elif re.search(r'MOV(\s)*([a-zA-Z]+)(\s)*,(\s)*(\[[0-9]+\])(\s)*', line):
         line = re.sub("(\s)*", "", line)
         return opcodes["MOV_RM"] + " " + getRegister(line[3:5]) + " " + line[7:len(line) - 1]
 
-    elif re.search('MOV(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
+    elif re.search(r'MOV(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
         line = re.sub("(\s)*", "", line)
         regs = line[3:].split(",")
         return opcodes['MOV_RR'] + " " + getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
 
-    elif re.search('MOV(\s)*(\[[0-9]+\])(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
+    elif re.search(r'MOV(\s)*(\[[0-9]+\])(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
         args = line[4:].split(",")
         return opcodes["MOV_MR"] + " " + (args[0])[1:len(args[0])-1] + " " + getRegister(args[1])
 
-    elif re.search('MOV(\s)*([a-zA-Z]+)(\s)*,(\s)*([-])?(\s)*([0-9]+)(\s)*', line):
+    elif re.search(r'MOV(\s)*([a-zA-Z]+)(\s)*,(\s)*([-])?(\s)*([0-9]+)(\s)*', line):
         line = re.sub(r"(\s)*", "", line)
         args = line[3:].split(",")
         return opcodes['MOV_RI'] + " " + getRegister(args[0]) + " " + args[1]
 
-    elif re.search('MOV(\s)*(\[[0-9]+\])(\s)*,(\s)*([-])?(\s)*([0-9]+)(\s)*', line):
+    elif re.search(r'MOV(\s)*(\[[0-9]+\])(\s)*,(\s)*([-])?(\s)*([0-9]+)(\s)*', line):
         line = re.sub(r"(\s)*", "", line)
         args = line[3:].split(",")
         return opcodes['MOV_MI'] + " " + (args[0])[1:len(args[0]) - 1] + " " + args[1]
 
-    elif re.search('ADD(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
+    elif re.search(r'ADD(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
         regs = line[3:].split(",")
         return opcodes['ADD'] + " " + getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
 
-    elif re.search('SUB(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
+    elif re.search(r'SUB(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
         regs = line[3:].split(",")
         return opcodes['SUB'] + " " + getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
 
-    elif re.search('CMP(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
+    elif re.search(r'CMP(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
         regs = line[3:].split(",")
         return opcodes['CMP'] + " " + getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
 
-    elif re.search('JMP(\s)*([0-9]+)', line):
+    elif re.search(r'JMP(\s)*([0-9]+)', line):
         line = line.strip()
         return opcodes['JMP'] + " " + (line.split(" "))[1]
 
-    elif re.search('JZ(\s)*([-])?(\s)*([0-9]+)', line):
+    elif re.search(r'JZ(\s)*([-])?(\s)*([0-9]+)', line):
         line = line.strip()
         return opcodes['JZ'] + " " + (line.split(" "))[1]
 
-    elif re.search('JG(\s)*([0-9]+)', line):
+    elif re.search(r'JG(\s)*([0-9]+)', line):
         line = line.strip()
         return opcodes['JG'] + " " + (line.split(" "))[1]
 
-    elif re.search('JL(\s)*([0-9]+)(\s)*', line):
+    elif re.search(r'JL(\s)*([0-9]+)(\s)*', line):
         line = line.strip()
         return opcodes['JL'] + " " + re.sub(r"JL(\s)*", "", line)
 
-    elif re.search('OUT(\s)*([a-zA-Z]+)(\s)*', line):
+    elif re.search(r'OUT(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
         args = re.sub(r"OUT(\s)*","",line)
 
         return opcodes['OUT'] + " " + getRegister(args)
 
-    elif re.search('INC(\s)*([a-zA-Z]+)(\s)*', line):
+    elif re.search(r'INC(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
         args = re.sub(r"INC(\s)*","",line)
 
         return opcodes['INC'] + " " + getRegister(args)
 
-    elif re.search('DEC(\s)*([a-zA-Z]+)(\s)*', line):
+    elif re.search(r'DEC(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
         args = re.sub(r"DEC(\s)*","",line)
 
         return opcodes['DEC'] + " " + getRegister(args)
 
-    elif re.search('MUL(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
+    elif re.search(r'MUL(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
         line = re.sub(r"MUL(\s)*","",line)
         regs = line.split(",")
         return opcodes['MUL'] + " " + getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
 
-    elif re.search('DIV(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
+    elif re.search(r'DIV(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
         line = re.sub(r"DIV(\s)*","",line)
         regs = line.split(",")
