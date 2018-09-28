@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import sys
 import re
 
@@ -68,7 +69,7 @@ def decode(line):
     elif re.search(r'MOV(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
         line = re.sub("(\s)*", "", line)
         regs = line[3:].split(",")
-        return opcodes['MOV_RR'] + " " + getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
+        return opcodes['MOV_RR'] + " " + getRegister(regs[0]) + " " + getRegister(regs[1])
 
     elif re.search(r'MOV(\s)*(\[[0-9]+\])(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
@@ -104,15 +105,15 @@ def decode(line):
         line = line.strip()
         return opcodes['JMP'] + " " + (line.split(" "))[1]
 
-    elif re.search(r'JZ(\s)*([-])?(\s)*([0-9]+)', line):
+    elif re.search(r'JZ(\s)*([-])?(\s)*([-])?([0-9]+)', line):
         line = line.strip()
         return opcodes['JZ'] + " " + (line.split(" "))[1]
 
-    elif re.search(r'JG(\s)*([0-9]+)', line):
+    elif re.search(r'JG(\s)*([-])?([0-9]+)', line):
         line = line.strip()
         return opcodes['JG'] + " " + (line.split(" "))[1]
 
-    elif re.search(r'JL(\s)*([0-9]+)(\s)*', line):
+    elif re.search(r'JL(\s)*([-])?([0-9]+)(\s)*', line):
         line = line.strip()
         return opcodes['JL'] + " " + re.sub(r"JL(\s)*", "", line)
 
@@ -142,7 +143,7 @@ def decode(line):
 
     elif re.search(r'DIV(\s)*([a-zA-Z]+)(\s)*,(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
-        line = re.sub(r"DIV(\s)*","",line)
+        line = re.sub(r"DIV(\s)*", "", line)
         regs = line.split(",")
         return opcodes['DIV'] + " " + getRegister(regs[0].strip()) + " " + getRegister(regs[1].strip())
 
