@@ -106,20 +106,20 @@ def decode(line):
         return opcodes['JMP'] + " " + (line.split(" "))[1]
 
     elif re.search(r'JZ(\s)*([-])?(\s)*([-])?([0-9]+)', line):
-        line = line.strip()
-        return opcodes['JZ'] + " " + (line.split(" "))[1]
+        line = re.sub(r"(\s)*", "", line)
+        return opcodes['JZ'] + " " + line[2:]
 
     elif re.search(r'JG(\s)*([-])?([0-9]+)', line):
-        line = line.strip()
-        return opcodes['JG'] + " " + (line.split(" "))[1]
+        line = re.sub(r"(\s)*", "", line)
+        return opcodes['JG'] + " " + line[2:]
 
     elif re.search(r'JL(\s)*([-])?([0-9]+)(\s)*', line):
-        line = line.strip()
-        return opcodes['JL'] + " " + re.sub(r"JL(\s)*", "", line)
+        line = re.sub(r"(\s)*", "", line)
+        return opcodes['JL'] + " " + line[2:]
 
     elif re.search(r'OUT(\s)*([a-zA-Z]+)(\s)*', line):
         line = line.strip()
-        args = re.sub(r"OUT(\s)*","",line)
+        args = re.sub(r"OUT(\s)*", "", line)
 
         return opcodes['OUT'] + " " + getRegister(args)
 
@@ -173,7 +173,7 @@ def main():
 
     print output
 
-    outputfile = open("bin/" + sys.argv[4], "a") if re.search('([a-zA-Z]+).run', sys.argv[4]) else open("bin/" + sys.argv[4] + ".run", "a")
+    outputfile = open("bin/" + sys.argv[4], "w") if re.search('([a-zA-Z]+).run', sys.argv[4]) else open("bin/" + sys.argv[4] + ".run", "w")
 
     outputfile.write(output)
 

@@ -1,7 +1,5 @@
 ; Teste de funcionamento eAssembler
-
-NOP				; nenhuma operaÃ§Ã£o
-HALT
+NOP
 MOV AX,BX
 MOV CX,[123]
 MOV [111],DX
@@ -19,3 +17,4 @@ INC AX			; incrementa
 DEC BX;decrementa
 MUL CX,DX
 DIV AX,BX
+HALT
